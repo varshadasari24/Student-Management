@@ -1,0 +1,134 @@
+import java.util.*;
+
+class Ticket {
+    int seatNumber;
+    boolean isBooked;
+    String passengerName;
+
+    Ticket(int seatNumber) {
+        this.seatNumber = seatNumber;
+        this.isBooked = false;
+        this.passengerName = "";
+    }
+}
+
+class TicketSystem {
+    ArrayList<Ticket> tickets = new ArrayList<>();
+
+    // Initialize seats
+    TicketSystem(int totalSeats) {
+        for (int i = 1; i <= totalSeats; i++) {
+            tickets.add(new Ticket(i));
+        }
+    }
+
+    // View available tickets
+    void viewAvailableTickets() {
+        System.out.println("Available Seats:");
+        for (Ticket t : tickets) {
+            if (!t.isBooked) {
+                System.out.print(t.seatNumber + " ");
+            }
+        }
+        System.out.println();
+    }
+
+    // Book ticket
+    void bookTicket(int seatNumber, String name) {
+        for (Ticket t : tickets) {
+            if (t.seatNumber == seatNumber) {
+                if (!t.isBooked) {
+                    t.isBooked = true;
+                    t.passengerName = name;
+                    System.out.println("Ticket booked successfully!");
+                } else {
+                    System.out.println("Seat already booked!");
+                }
+                return;
+            }
+        }
+        System.out.println("Invalid seat number!");
+    }
+
+    // Cancel ticket
+    void cancelTicket(int seatNumber) {
+        for (Ticket t : tickets) {
+            if (t.seatNumber == seatNumber) {
+                if (t.isBooked) {
+                    t.isBooked = false;
+                    t.passengerName = "";
+                    System.out.println("Ticket cancelled successfully!");
+                } else {
+                    System.out.println("Seat is not booked!");
+                }
+                return;
+            }
+        }
+        System.out.println("Invalid seat number!");
+    }
+
+    // View booked tickets
+    void viewBookedTickets() {
+        System.out.println("Booked Tickets:");
+        for (Ticket t : tickets) {
+            if (t.isBooked) {
+                System.out.println("Seat: " + t.seatNumber + 
+                                   " | Name: " + t.passengerName);
+            }
+        }
+    }
+}
+
+public class TicketBookingSystem {
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        TicketSystem system = new TicketSystem(10); // 10 seats
+
+        while (true) {
+            System.out.println("\n--- Ticket Booking Menu ---");
+            System.out.println("1. View Available Seats");
+            System.out.println("2. Book Ticket");
+            System.out.println("3. Cancel Ticket");
+            System.out.println("4. View Booked Tickets");
+            System.out.println("5. Exit");
+
+            System.out.print("Enter choice: ");
+            int choice = sc.nextInt();
+            sc.nextLine();
+
+            switch (choice) {
+                case 1:
+                    system.viewAvailableTickets();
+                    break;
+
+                case 2:
+                    System.out.print("Enter seat number: ");
+                    int seat = sc.nextInt();
+                    sc.nextLine();
+
+                    System.out.print("Enter passenger name: ");
+                    String name = sc.nextLine();
+
+                    system.bookTicket(seat, name);
+                    break;
+
+                case 3:
+                    System.out.print("Enter seat number to cancel: ");
+                    int cancelSeat = sc.nextInt();
+                    system.cancelTicket(cancelSeat);
+                    break;
+
+                case 4:
+                    system.viewBookedTickets();
+                    break;
+
+                case 5:
+                    System.out.println("Exiting...");
+                    return;
+
+                default:
+                    System.out.println("Invalid choice!");
+            }
+        }
+    }
+}
